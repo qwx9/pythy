@@ -21,3 +21,4 @@ trk <- foreach(f=fi, .inorder=FALSE, .packages=c("jsonlite")) %dopar% {
 }
 trk <- unique(unlist(trk))
 write.table(trk, file="names.txt", quote=FALSE, row.names=FALSE, col.names=FALSE)
+stopCluster(cl)
