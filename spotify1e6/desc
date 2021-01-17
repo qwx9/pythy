@@ -1,0 +1,31 @@
+spotify 1e6 playlists challenge data.
+1000 json files with 1000 playlists each, containing tracks
+referenced by a unique id.
+
+pretreatment code to generate a giant matrix, with all
+playlists on rows, all unique tracks on columns.
+value ij = 1 if playlist i contains track j, 0 otherwise.
+resulting matrix is too big, hence the use of csr sparse
+matrices.
+further computations on the matrix must be done in python,
+so scipy csr_matrix objects are created and written in npz
+format.
+first pass extracts a list of unique tracks across all
+playlists. less than 20 minutes with parallel processing
+in R.
+second pass creates the matrix: for each json file,
+intersect each playlist with track list, then create a
+sparse matrix. in the end, concatenate all generated rows
+into a single matrix.
+R: parallelize by splitting json files in 8 chunks to be
+parsed by 8 processes. create scipy objects using
+reticulate. each process binds matrices for each json
+file together. the result is a list of 8 matrices, which
+are bound together into a final one. 0.6 minutes per json
+file.
+python: same thing directly with python, prototype for a
+single file: 3.5 minutes.
+tradeoff: speed vs memory, R uses up to 50gb for 8 procs.
+
+key takeaway here: R does python better than python.
+i don't get it. please prove me wrong.
